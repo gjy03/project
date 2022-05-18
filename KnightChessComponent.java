@@ -12,21 +12,25 @@ import java.awt.Image;
 import java.awt.Point;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import javax.imageio.ImageIO;
 import view.ChessboardPoint;
 
-public class RookChessComponent extends ChessComponent {
-    private static Image ROOK_WHITE;
-    private static Image ROOK_BLACK;
+public class KnightChessComponent extends ChessComponent {
+    List<ChessboardPoint> arrayList=new LinkedList<>();
+    private static Image KNIGHT_WHITE;
+    private static Image KNIGHT_BLACK;
     private Image rookImage;
 
     public void loadResource() throws IOException {
-        if (ROOK_WHITE == null) {
-            ROOK_WHITE = ImageIO.read(new File("./images/rook-white.png"));
+        if (KNIGHT_WHITE == null) {
+            KNIGHT_WHITE = ImageIO.read(new File("./images/knight-white.png"));
         }
 
-        if (ROOK_BLACK == null) {
-            ROOK_BLACK = ImageIO.read(new File("./images/rook-black.png"));
+        if (KNIGHT_BLACK == null) {
+            KNIGHT_BLACK = ImageIO.read(new File("./images/knight-black.png"));
         }
 
     }
@@ -35,9 +39,9 @@ public class RookChessComponent extends ChessComponent {
         try {
             this.loadResource();
             if (color == ChessColor.WHITE) {
-                this.rookImage = ROOK_WHITE;
+                this.rookImage = KNIGHT_WHITE;
             } else if (color == ChessColor.BLACK) {
-                this.rookImage = ROOK_BLACK;
+                this.rookImage = KNIGHT_BLACK;
             }
         } catch (IOException var3) {
             var3.printStackTrace();
@@ -45,44 +49,22 @@ public class RookChessComponent extends ChessComponent {
 
     }
 
-    public RookChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size) {
+    public KnightChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor color, ClickController listener, int size) {
         super(chessboardPoint, location, color, listener, size);
         this.initiateRookImage(color);
         if (this.chessColor == ChessColor.BLACK) {
-            this.name = "R";
+            this.name = "N";
         } else {
-            this.name = "r";
+            this.name = "n";
         }
 
     }
 
     public boolean canMoveTo(ChessComponent[][] chessComponents, ChessboardPoint destination) {
         ChessboardPoint source = this.getChessboardPoint();
-        int col;
-        int row;
-        if (source.getX() == destination.getX()) {
-            col = source.getX();
-
-            for(row = Math.min(source.getY(), destination.getY()) + 1; row < Math.max(source.getY(), destination.getY()); ++row) {
-                if (!(chessComponents[col][row] instanceof EmptySlotComponent)) {
-                    return false;
-                }
-            }
-        } else {
-            if (source.getY() != destination.getY()) {
-                return false;
-            }
-
-            col = source.getY();
-
-            for(row = Math.min(source.getX(), destination.getX()) + 1; row < Math.max(source.getX(), destination.getX()); ++row) {
-                if (!(chessComponents[row][col] instanceof EmptySlotComponent)) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
+        int dx = Math.abs(source.getX() - destination.getX());
+        int dy = Math.abs(source.getY() - destination.getY());
+        return dx == 1 && dy == 2 || dx == 2 && dy == 1;
     }
 
     protected void paintComponent(Graphics g) {

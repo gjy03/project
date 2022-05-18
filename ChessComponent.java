@@ -7,6 +7,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 这个类是一个抽象类，主要表示8*8棋盘上每个格子的棋子情况，当前有两个子类继承它，分别是EmptySlotComponent(空棋子)和RookChessComponent(车)。
@@ -21,12 +23,18 @@ public abstract class ChessComponent extends JComponent {
      * 因此每个棋子占用的形状是一个正方形，大小是50*50
      */
 
-//    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);
+    private static final Dimension CHESSGRID_SIZE = new Dimension(1080 / 4 * 3 / 8, 1080 / 4 * 3 / 8);
     private static final Color[] BACKGROUND_COLORS = {Color.WHITE, Color.BLACK};
+    private static final Color[] BACKGROUND_COLORSTheme2 = {Color.GREEN, Color.BLACK};
     /**
      * handle click event
      */
     private ClickController clickController;
+    protected ChessComponent[][] chessComponents = new  ChessComponent[8][8];
+
+    public void setChessComponents(ChessComponent[][] chessComponents) {
+        this.chessComponents = chessComponents;
+    }
 
     /**
      * chessboardPoint: 表示8*8棋盘中，当前棋子在棋格对应的位置，如(0, 0), (1, 0), (0, 7),(7, 7)等等
@@ -38,6 +46,19 @@ public abstract class ChessComponent extends JComponent {
     private ChessboardPoint chessboardPoint;
     protected final ChessColor chessColor;
     private boolean selected;
+    private boolean canBeMoved;
+    private boolean entered;
+    protected String name;
+    private boolean attacked;
+
+    public boolean isAttacked() {
+        return attacked;
+    }
+
+    public void setAttacked(boolean attacked) {
+        this.attacked = attacked;
+    }
+
 
     protected ChessComponent(ChessboardPoint chessboardPoint, Point location, ChessColor chessColor, ClickController clickController, int size) {
         enableEvents(AWTEvent.MOUSE_EVENT_MASK);
@@ -46,6 +67,8 @@ public abstract class ChessComponent extends JComponent {
         this.chessboardPoint = chessboardPoint;
         this.chessColor = chessColor;
         this.selected = false;
+        this.canBeMoved=false;
+        this.entered=false;
         this.clickController = clickController;
     }
 
@@ -59,6 +82,11 @@ public abstract class ChessComponent extends JComponent {
 
     public ChessColor getChessColor() {
         return chessColor;
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     public boolean isSelected() {
@@ -91,12 +119,21 @@ public abstract class ChessComponent extends JComponent {
     @Override
     protected void processMouseEvent(MouseEvent e) {
         super.processMouseEvent(e);
-
         if (e.getID() == MouseEvent.MOUSE_PRESSED) {
             System.out.printf("Click [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
             clickController.onClick(this);
         }
-    }
+
+        if (e.getID() == MouseEvent.MOUSE_ENTERED){
+            this.entered=true;
+            this.repaint();
+        }
+        if (e.getID() == MouseEvent.MOUSE_EXITED){
+            this.entered=false;
+            this.repaint();
+        }
+    }//输出选中的棋子的坐标
+    //可以在这个地方写显示canMoveTo的方法
 
     /**
      * @param chessboard  棋盘
@@ -117,9 +154,37 @@ public abstract class ChessComponent extends JComponent {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponents(g);
-        System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
+//        System.out.printf("repaint chess [%d,%d]\n", chessboardPoint.getX(), chessboardPoint.getY());
         Color squareColor = BACKGROUND_COLORS[(chessboardPoint.getX() + chessboardPoint.getY()) % 2];
         g.setColor(squareColor);
         g.fillRect(0, 0, this.getWidth(), this.getHeight());
+
+
+        if (entered){
+            g.setColor(Color.darkGray);
+            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        }else {
+//            g.setColor(squareColor);
+//            g.fillRect(0, 0, this.getWidth(), this.getHeight());
+        }
+        if(isAttacked()){// Highlights the model if selected.
+            g.setColor(Color.green);
+            g.fillOval(25, 25, getWidth()/3 , getHeight()/3);
+        }
+    }
+
+    public List<ChessboardPoint> getPointsCanMoveTo(ChessComponent[][] chessboard) {
+        List<ChessboardPoint> points = new ArrayList<>();
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                ChessboardPoint destination = new ChessboardPoint(i,j);
+                if(canMoveTo(chessboard,destination)==true&&
+                chessboard[i][j].getChessColor()!=
+                        chessboard[chessboardPoint.getX()][chessboardPoint.getY()].chessColor) {
+                    points.add(new ChessboardPoint(i,j));
+                }
+            }
+        }
+        return points;
     }
 }
