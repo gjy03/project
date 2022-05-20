@@ -180,7 +180,7 @@ public class Chessboard extends JComponent {
         chessComponents[row1][col1] = chess1;
         int row2 = chess2.getChessboardPoint().getX(), col2 = chess2.getChessboardPoint().getY();
         chessComponents[row2][col2] = chess2;
-
+        //移动动画
         int xOffset = row2-row1 >> 2;int yOffset = col2-col1 >> 2;
         for (int a=0;a<4;a++){
             chess1.setLocation(row1+xOffset,col1+yOffset);
