@@ -1,7 +1,5 @@
 package controller;
 
-
-
 import java.applet.AudioClip;
 import java.io.*;
 import java.applet.Applet;
@@ -25,7 +23,7 @@ class Music_Click extends JFrame{
         }
     }
     public static void main(String args[]) {
-        new Music_Click();
+        new controller.Music_Click();
     }
 
 

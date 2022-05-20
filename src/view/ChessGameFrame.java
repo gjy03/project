@@ -62,9 +62,18 @@ public class ChessGameFrame extends JFrame {
         add(chessboard);
         String pa="images/加载页面2.jpeg";
         String pa2="images/主题3.jpeg";
-        chessboard.changeChessBoard(pa,pa2);
+        //chessboard.changeChessBoard(pa,pa2);
 
 
+        JLabel timeCounter;
+        //TimeCounter time11=new TimeCounter();
+        timeCounter = new JLabel("剩余时间：");
+        timeCounter.setSize(160, 48);
+        timeCounter.setLocation(HEIGTH, HEIGTH / 10 + 10);
+        timeCounter.setFont(new Font("Rockwell", Font.BOLD, 24));
+        chessboard.changeTime(timeCounter);
+        add(timeCounter);
+        chessboard.time3();
 
 
         /**
@@ -73,17 +82,18 @@ public class ChessGameFrame extends JFrame {
         JLabel statusLabel;
         statusLabel = new JLabel("        黑方回合");
         statusLabel.setSize(160, 48);
+
         statusLabel.setFont(new Font("Rockwell", Font.BOLD, 24));
         chessboard.changeLabel(statusLabel);
         add(statusLabel);
-        add(new JPanel());
+       // add(new JPanel());
 
         /**
          * 在游戏面板中增加一个按钮，如果按下的话就会显示Hello, world!
          */
         JButton button = new JButton("保存至存档一");
         button.addActionListener((e) -> JOptionPane.showMessageDialog(this, "保存成功！"));
-        button.setLocation(HEIGTH-20, HEIGTH / 10 + 20);
+        button.setLocation(HEIGTH, HEIGTH / 10 + 60);
         button.setSize(160, 48);
         button.setFont(new Font("Rockwell", Font.BOLD, 16));
         add(button);
@@ -103,7 +113,7 @@ public class ChessGameFrame extends JFrame {
         });
 
         JButton Load = new JButton("保存至存档二");
-        Load.setLocation(HEIGTH-20, HEIGTH / 10 + 100);
+        Load.setLocation(HEIGTH, HEIGTH / 10 + 115);
         Load.setSize(160, 48);
         Load.setFont(new Font("Rockwell", Font.BOLD, 16));
         add(Load);
@@ -129,34 +139,60 @@ public class ChessGameFrame extends JFrame {
         Reset.addActionListener((e) -> {
             int confirm=JOptionPane.showConfirmDialog(null,"是否重置","a",JOptionPane.YES_NO_OPTION);
             if(confirm==JOptionPane.YES_NO_OPTION){
+                if(currentColor==ChessColor.WHITE){
+                    chessboard.setCurrentColor(ChessColor.BLACK);
+                }else {
+                    chessboard.setCurrentColor(ChessColor.WHITE);
+                }
+                try {
+                    Thread.currentThread().sleep(1000);
+                }
+                catch(Exception a){
+                }
+
                 chessboard.setCurrentColor(ChessColor.BLACK);
                 chessboard.getChessComponents();
+
                 //add(chessboard);
                 chessboard.initializeChess();
+                chessboard.time3();
                 repaint();
             }
         });
-        Reset.setLocation(HEIGTH-20, HEIGTH / 10 +180);
+        Reset.setLocation(HEIGTH, HEIGTH / 10 +170);
         Reset.setSize(160, 48);
         Reset.setFont(new Font("Rockwell", Font.BOLD, 16));
         add(Reset);
 
         {
             JButton Regret = new JButton("悔棋");
-            Regret.setLocation(HEIGTH-20, HEIGTH / 10 + 260);
+            Regret.setLocation(HEIGTH, HEIGTH / 10 + 225);
             Regret.setSize(160, 48);
             Regret.setFont(new Font("Rockwell", Font.BOLD, 16));
             add(Regret);
 
             Regret.addActionListener(e -> {
+                if(currentColor==ChessColor.WHITE){
+                    chessboard.setCurrentColor(ChessColor.BLACK);
+                }else {
+                    chessboard.setCurrentColor(ChessColor.WHITE);
+                }
+                try {
+                    Thread.currentThread().sleep(1000);
+                }
+                catch(Exception a){
+                }
                 // System.out.println(chessboard.regretChessDataTure);
+                //chessboard.swapColor();
+                chessboard.time3();
                 chessboard.loadGame(chessboard.regretChessDataTure);
-                repaint();
+                chessboard.repaint();
+
             });
         }
 
         JButton exit =new JButton("返回菜单");
-        exit.setLocation(HEIGTH-20, HEIGTH / 10 + 340);
+        exit.setLocation(HEIGTH, HEIGTH / 10 + 280);
         exit.setSize(160, 48);
         exit.setFont(new Font("Rockwell", Font.BOLD, 16));
         add(exit);
@@ -170,7 +206,7 @@ public class ChessGameFrame extends JFrame {
         });
 
         JButton changeBackground=new JButton("更改棋盘");
-        changeBackground.setLocation(HEIGTH-20, HEIGTH / 10 + 420);
+        changeBackground.setLocation(HEIGTH, HEIGTH / 10 + 335);
         changeBackground.setSize(160, 48);
         changeBackground.setFont(new Font("Rockwell", Font.BOLD, 16));
         add(changeBackground);
@@ -178,15 +214,17 @@ public class ChessGameFrame extends JFrame {
             Object[] optionsBackground={"棋盘1","棋盘2","棋盘3"};
             String BackGroundTheme=(String)JOptionPane.showInputDialog(null,"更换棋盘\n","更换",JOptionPane.PLAIN_MESSAGE,new ImageIcon("xx.png"),optionsBackground,"棋盘");
             if (BackGroundTheme == "棋盘1") {
-                String path1="images/加载页面2.jpeg";
-                String path2="images/主题3.jpeg";
-                chessboard.changeChessBoard(path1,path2);
+//                String path1="images/加载页面2.jpeg";
+//                String path2="images/主题3.jpeg";
+//                chessboard.changeChessBoard(path1,path2);
+                Color[] COLOR1={Color.WHITE, Color.RED};
+                chessboard.changeChessBoardColor(COLOR1);
             }
         });
 
         JButton changeTheme=new JButton("更改背景");
         //JButton exit =new JButton("返回菜单");
-        changeTheme.setLocation(HEIGTH-20, HEIGTH / 10 + 500);
+        changeTheme.setLocation(HEIGTH, HEIGTH / 10 + 390);
         changeTheme.setSize(160, 48);
         changeTheme.setFont(new Font("Rockwell", Font.BOLD, 16));
         add(changeTheme);
@@ -206,16 +244,6 @@ public class ChessGameFrame extends JFrame {
                 changeTheme(path);
             }
         });
-
-//        Object[] options={"骑士","皇后","大象","战车"};
-//        int op = JOptionPane.showOptionDialog(null, "请选择升级成：", "升级",JOptionPane.YES_NO_CANCEL_OPTION,JOptionPane.QUESTION_MESSAGE,null, options, options[0]);
-
-
-//        JButton changeBackground=new JButton("更改背景");
-//        changeTheme.setLocation(HEIGTH, HEIGTH / 10 + 450);
-//        changeTheme.setSize(160, 48);
-//        changeTheme.setFont(new Font("Rockwell", Font.BOLD, 16));
-//        add(changeTheme);
     }
     public void changeTheme(String path){
         remove(Label);
@@ -227,9 +255,6 @@ public class ChessGameFrame extends JFrame {
         Label.setBounds(0,0,getWidth(),getHeight());
         add(Label);
         Label.repaint();
-    }
-    public void changeBackGround(){
-
     }
 
     public static void main(String[] args){

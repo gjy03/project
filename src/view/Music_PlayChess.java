@@ -1,10 +1,9 @@
 package view;
 
-import java.applet.AudioClip;
-import java.io.*;
 import java.applet.Applet;
-import java.awt.Frame;
-import java.net.MalformedURLException;
+import java.applet.AudioClip;
+import java.awt.*;
+import java.io.File;
 import java.net.URL;
 class Music_PlayChess extends Frame{
     URL cb;
@@ -19,7 +18,7 @@ class Music_PlayChess extends Frame{
             cb = f.toURL();
             aau = Applet.newAudioClip(cb);
             // TODO Auto-generated method stub
-            aau.play();
+            aau.loop();
         } catch (Exception e) {
             e.printStackTrace();
         }

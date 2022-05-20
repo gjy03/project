@@ -1,30 +1,27 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by FernFlower decompiler)
-//
-
 package model;
 
-import java.awt.Color;
+import java.awt.*;
 
+
+/**
+ * 这个类主要用于包装Color对象，用于Chess游戏使用。
+ */
 public enum ChessColor {
-    BLACK("Black", Color.BLACK),
-    WHITE("White", Color.WHITE),
-    NONE("No Player", Color.WHITE);
+    BLACK("Black", Color.BLACK), WHITE("White", Color.WHITE), NONE("No Player", Color.WHITE);
 
     private final String name;
     private final Color color;
 
-    private ChessColor(String name, Color color) {
+    ChessColor(String name, Color color) {
         this.name = name;
         this.color = color;
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public Color getColor() {
-        return this.color;
+        return color;
     }
 }

@@ -12,7 +12,7 @@ class singlePlayerListener implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         new Music_Click();
         new Music_PowerOfGame().stop();
-        new Music_PlayChess().play();
+//        new Music_PlayChess().play();
 
         ChessGameFrame.fatherFrame = newGameOptionFrame;
         ChessGameFrame.main(null);

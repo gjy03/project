@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.WindowEvent;
 
 public class Login {
+    public class login{}
 
     public static void main(String[] args) {
         JFrame loginFrame = new JFrame("游戏加载中……");

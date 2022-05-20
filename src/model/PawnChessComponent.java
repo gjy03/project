@@ -61,7 +61,7 @@ public class PawnChessComponent extends ChessComponent{
         }
         String[] m = {""};
         lines.forEach(ele -> {
-            System.out.println(ele);
+            //System.out.println(ele);
             m[0] = m[0] +ele;
         });
         help.add(m[0].substring(1,9));
@@ -185,5 +185,4 @@ public class PawnChessComponent extends ChessComponent{
             g.drawOval(0, 0, getWidth() , getHeight());
         }
     }
-
 }
