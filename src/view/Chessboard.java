@@ -190,7 +190,7 @@ public class Chessboard extends JComponent {
                 e.printStackTrace();
             }
         }
-        chess1.setLocation(row2,col2);
+//        chess1.setLocation(row2,col2);
         chess1.swapLocation(chess2);
         //读取文档数据
         File file = new File("regretChessDataTure.txt");
